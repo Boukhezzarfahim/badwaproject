@@ -1,0 +1,68 @@
+
+.custom-testimony-container {
+    display: flex;
+    overflow-x: auto; /* Ajoute une barre de défilement horizontale */
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap; /* Empêche le passage à la ligne par défaut */
+  }
+  
+  /* Ajoutez ce style pour ajuster la taille des produits et l'espace entre eux */
+  .custom-testimony-wrap {
+    flex: 0 0 33.3333%; /* Un produit par ligne sur les grands écrans par défaut */
+    box-sizing: border-box;
+    padding: 15px;
+  }
+  
+  .custom-user-img {
+    background-size: cover;
+    background-position: center center;
+    height: 300px; /* Ajustez la hauteur selon vos besoins */
+    width: 100%;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+  
+  .navigation-btns {
+    display: none; /* Cacher les boutons de navigation par défaut */
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .prev-btn,
+  .next-btn {
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .prev-btn:hover,
+  .next-btn:hover {
+    background-color: #45a049;
+  }
+  
+  /* Afficher les boutons de navigation uniquement sur les petits écrans */
+  @media only screen and (max-width: 768px) {
+    .custom-testimony-container {
+        flex-wrap: nowrap; /* Empêche le passage à la ligne sur les petits écrans */
+    }
+  
+    .custom-testimony-wrap {
+        flex: 0 0 100%; /* Un produit par ligne sur les petits écrans */
+    }
+  
+    .navigation-btns {
+        display: flex;
+    }
+  }
+
+  .map-container {
+    height: 450px;
+  }
+  .votre-classe p {
+    color: black;
+}
