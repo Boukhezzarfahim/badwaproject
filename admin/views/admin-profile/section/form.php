@@ -19,7 +19,7 @@ if (isset($_POST['update'])) {
         // Toast Notification for Update Success
         echo '<script>';
         echo 'alert("Modifié avec succès!");';
-        echo 'window.location.href = "http://localhost/php-admin-panel/admin/dashboard.php?page=section02";';
+        echo 'window.location.href = "http://localhost/badwaproject/admin/dashboard.php?page=section02";';
         echo '</script>';
         exit();
     }

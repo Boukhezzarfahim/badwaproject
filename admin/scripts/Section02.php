@@ -124,38 +124,71 @@ class Section {
         return $data;
     }
 
-    public function updateById($id,$firstName) {
+    public function updateById($id, $firstName) {
         $validate = $this->validate($firstName);
         $success = false;
-        
-        
+        $uploadProfileImage = $this->uploadProfileImage($id);
+    
         if (!$validate['error']) {
-            $uploadProfileImage = $this->uploadProfileImage($id);
-           
+            // Supprimer l'ancienne image avant la mise à jour uniquement si une nouvelle image est fournie
             if (!$uploadProfileImage['error']) {
-            // Replace 'content' with the correct table name for admin profiles
+                $this->deleteProfileImageOnUpdate($id);
+            }
+    
+            // Mettre à jour la base de données avec la nouvelle image si elle a été fournie
+            if ($uploadProfileImage['error']) {
+                $query = "UPDATE " . $this->sectionTable . " SET firstName = ? WHERE id = ?";
+                $stmt = $this->conn->prepare($query);
+                $stmt->bind_param("si", $firstName, $id);
+            } else {
                 $query = "UPDATE " . $this->sectionTable . " SET firstName = ?, profileImage = ? WHERE id = ?";
                 $stmt = $this->conn->prepare($query);
-                $stmt->bind_param("sss",$firstName,$uploadProfileImage['profileImage'], $id);
-            
-                if ($stmt->execute()) {
-                    $success = true;
-                    
-                } 
-           }
+                $stmt->bind_param("ssi", $firstName, $uploadProfileImage['profileImage'], $id);
+            }
+    
+            if ($stmt->execute()) {
+                $success = true;
+            }
         }
-        
+    
         $data = [
             'success' => $success,
             'errMsg' => $validate['errMsg'],
             'uploadProfileImage' => $uploadProfileImage['profileImageErr'] ?? 'Unable to upload profile due to other fields facing errors',
         ];
-
-        
+    
         return $data;
     }
     
     
+    
+// Ajoutez cette fonction à votre classe Section
+public function deleteProfileImageOnUpdate($id) {
+    $data = $this->getById($id);
+
+    // Vérifiez si l'entrée existe avant de supprimer l'image
+    if (!empty($data['profileImage'])) {
+        // Chemin du dossier de stockage
+        $uploadTo = "public/images/section02/";
+
+        // Chemin complet du fichier image
+        $filePath = $uploadTo . $data['profileImage'];
+
+        // Ajoutez des messages de débogage
+        echo "Trying to delete old file: " . $filePath . "<br>";
+
+        // Vérifiez si le fichier existe avant de le supprimer
+        if (file_exists($filePath)) {
+            if (unlink($filePath)) {
+                echo "Old file deleted successfully.<br>";
+            } else {
+                echo "Error deleting old file.<br>";
+            }
+        } else {
+            echo "Old file does not exist.<br>";
+        }
+    }
+}
 
     
 }

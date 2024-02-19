@@ -251,6 +251,33 @@ public function validate($image, $texte) {
             return false;
         }
     }
+    public function deleteImageFileOnDelete($id) {
+        $data = $this->getById($id);
+    
+        // Vérifiez si l'entrée existe avant de la supprimer
+        if (!empty($data['image'])) {
+            // Chemin du dossier de stockage
+            $uploadTo = "public/images/section01/";
+    
+            // Chemin complet du fichier image
+            $filePath = $uploadTo . $data['image'];
+    
+            // Ajoutez des messages de débogage
+            echo "Trying to delete file: " . $filePath . "<br>";
+    
+            // Vérifiez si le fichier existe avant de le supprimer
+            if (file_exists($filePath)) {
+                if (unlink($filePath)) {
+                    echo "File deleted successfully.<br>";
+                } else {
+                    echo "Error deleting file.<br>";
+                }
+            } else {
+                echo "File does not exist.<br>";
+            }
+        }
+    }
+    
     
 }
 ?>

@@ -29,10 +29,10 @@ if (isset($_POST['create']) || isset($_POST['update'])) {
         echo '<script>';
         if (isset($_POST['create'])) {
             echo 'alert("Ajouté avec succès!");';
-            echo 'window.location.href = "http://localhost/php-admin-panel/admin/dashboard.php?page=section-list";';
+            echo 'window.location.href = "http://localhost/badwaproject/admin/dashboard.php?page=section-list";';
         } elseif (isset($_POST['update'])) {
             echo 'alert("Modifié avec succès!");';
-            echo 'window.location.href = "http://localhost/php-admin-panel/admin/dashboard.php?page=section-form";';
+            echo 'window.location.href = "http://localhost/badwaproject/admin/dashboard.php?page=section-form";';
         }
         echo '</script>';
         exit();
