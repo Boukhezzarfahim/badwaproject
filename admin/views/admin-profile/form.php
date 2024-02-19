@@ -91,10 +91,7 @@ if($id) {
      <h3 class="mb-4">Admin Profile Form</h3>
      <?php echo $msg; ?>
     </div>
-    <div class="col-sm-6 text-end">
-        <a href="dashboard.php?page=admin-profile-list" class="btn btn-success">Admin list</a>
-    </div>
-</div>
+
 
 
 <form method="post" enctype="multipart/form-data">
@@ -144,4 +141,4 @@ if($id) {
     </div>
 
     <button type="submit" class="btn btn-success" name="<?= $id ? 'update' : 'create'; ?>">Save</button>
-  </form>
+  </form> -->

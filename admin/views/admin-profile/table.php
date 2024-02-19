@@ -14,10 +14,7 @@
     <div class="col-sm-6">
      <h3 class="mb-4">Admins</h3>
     </div>
-    <div class="col-sm-6 text-end">
-        <a href="dashboard.php?page=admin-profile-form" class="btn btn-success">Ajouter un admin</a>
-    </div>
-</div>
+
 
 <div class="table-responsive-sm">
 <table class="table table-hover">
@@ -26,10 +23,8 @@
       <th>ID</th>
         <th>Profile Image</th>
         <th>Nom et prénom</th>
-        <th>Genre</th>
         <th>Email</th>
-        <th>Numéro de téléphone</th>
-        <th colspan="2" class="text-center">Actions</th>
+       
       </tr>
     </thead>
     <tbody>
@@ -46,10 +41,10 @@
           <?= $data['firstName'] . " " . $data['lastName']; ?> <br>
         
         </td>
-        <td>  <?= $data['gender']; ?></td>
+       
         <td><?= $data['emailAddress']; ?></td>
-        <td><?= $data['mobileNumber']; ?></td>
-        <td class="text-center">
+       
+        <!-- <td class="text-center">
             <a href="dashboard.php?page=admin-profile-form&id=<?= $data['id']; ?>" class="text-success">
                 <i class="fa fa-edit"></i>
             </a>
@@ -59,7 +54,7 @@
             <a href="javascript:void(0)" onclick="confirmAdminProfileDelete(<?=$data['id']; ?>)" class="text-danger">
               <i class="fa fa-trash-o"></i>
             </a>
-        </td>
+        </td> -->
        
       </tr>
        <?php 
