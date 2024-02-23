@@ -1,44 +1,43 @@
 <?php
-class SectionManager {
+
+class Section03 {
 
     private $conn;
-    private $sectionTable = 'section01';
-    
+    private $sectionTable = 'section03';
 
     public function __construct($conn) {
         $this->conn = $conn;
     }
-public function validate($image, $texte) {
-    $error = false;
-    $errMsg = null;
-    $imageErr = '';
-    $texteErr = '';
 
-    // ... (autres validations)
+    public function validate($image, $description) {
+        $error = false;
+        $errMsg = null;
+        $imageErr = '';
+        $descriptionErr = '';
 
-    if (!empty($image) && !empty($_POST['id'])) {
-        $imageErr = "Image is required";
-        $error = true;
+        // ... (other validations)
+
+        if (!empty($image) && !empty($_POST['id'])) {
+            $imageErr = "Image is required";
+            $error = true;
+        }
+
+        // ... (other validations)
+
+        $errorInfo = [
+            "error" => $error,
+            "errMsg" => [
+                "image" => $imageErr,
+                "description" => $descriptionErr
+            ]
+        ];
+
+        return $errorInfo;
     }
-
-    // ... (autres validations)
-
-    $errorInfo = [
-        "error" => $error,
-        "errMsg" => [
-            "image" => $imageErr,
-            "texte" => $texteErr
-        ]
-    ];
-
-    return $errorInfo;
-}
-
-
     public function uploadImage($id = null) {
         $error = false;
         $imageErr = '';
-        $uploadTo = "public/images/section01/"; 
+        $uploadTo = "public/images/section03/";
         $allowFileTypes = array('jpg', 'png', 'jpeg');
         $fileName = $_FILES['image']['name'];
     
@@ -67,10 +66,10 @@ public function validate($image, $texte) {
                     $newFileName = $hashedName . '.' . $fileType;
                     $originalPath = $uploadTo . $newFileName;
     
-                    // Redimensionner l'image
+                    // Redimensionner l'image (ajuster selon vos besoins)
                     list($width, $height) = getimagesize($tempPath);
-                    $newWidth = 1800;
-                    $newHeight = 1300;
+                    $newWidth = 920;
+                    $newHeight = 950;
     
                     $imageResized = imagecreatetruecolor($newWidth, $newHeight);
     
@@ -95,8 +94,8 @@ public function validate($image, $texte) {
         }
     
         $imageInfo = [
-            "error" => $error, 
-            "imageErr" => $imageErr, 
+            "error" => $error,
+            "imageErr" => $imageErr,
             "image" => $newFileName ?? $fileName
         ];
     
@@ -105,18 +104,18 @@ public function validate($image, $texte) {
     
 
 
-    public function create($image, $texte) {
-        $validate = $this->validate($image, $texte);
+    public function create($title, $image, $description, $position) {
+        $validate = $this->validate($image, $description);
         $success = false;
 
         if (!$validate['error']) {
             $uploadImage = $this->uploadImage();
 
             if (!$uploadImage['error']) {
-                $query = "INSERT INTO " . $this->sectionTable . " (image, texte, updated_at) VALUES (?, ?, NOW())";
+                $query = "INSERT INTO " . $this->sectionTable . " (title, image, description, position, updated_at) VALUES (?, ?, ?, ?, NOW())";
                 $stmt = $this->conn->prepare($query);
 
-                $stmt->bind_param("ss", $uploadImage['image'], $texte);
+                $stmt->bind_param("sssi", $title, $uploadImage['image'], $description, $position);
 
                 if ($stmt->execute()) {
                     $success = true;
@@ -136,136 +135,122 @@ public function validate($image, $texte) {
 
     public function get() {
         $data = [];
-    
-        $query = "SELECT id, image, texte, updated_at FROM ";
+
+        $query = "SELECT id, title, image, description, position, updated_at FROM ";
         $query .= $this->sectionTable;
 
         $result = $this->conn->query($query);
-        
+
         if ($result) {
             while ($row = $result->fetch_assoc()) {
                 $data[] = $row;
             }
             $result->free();
         }
-    
+
         return $data;
     }
 
     public function getById($id) {
         $data = [];
-    
-        $query = "SELECT id, image, texte, updated_at FROM ";
+
+        $query = "SELECT id, title, image, description, position, updated_at FROM ";
         $query .= $this->sectionTable;
         $query .= " WHERE id = ?";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $id);
-       
+
         if ($stmt->execute()) {
             $result = $stmt->get_result();
             $data = $result->fetch_assoc();
             $stmt->close();
-        } 
+        }
 
         return $data;
     }
-    public function updateById($id, $image, $texte) {
-        $validate = $this->validate($image, $texte);
+
+    public function updateById($id, $title, $image, $description, $position) {
+        $validate = $this->validate($image, $description);
         $success = false;
         $uploadImage = $this->uploadImage($id);
-    
+
         if (!$validate['error']) {
-            // ... (le reste du code)
-    
+            // ... (rest of the code)
+
             // Vérifiez si une nouvelle image est fournie
             if (!empty($image) && !$uploadImage['error']) {
                 // Si la nouvelle image est valide, mettez à jour la base de données
-                $query = "UPDATE " . $this->sectionTable . " SET image = ?, texte = ? WHERE id = ?";
+                $query = "UPDATE " . $this->sectionTable . " SET title = ?, image = ?, description = ?, position = ? WHERE id = ?";
                 $stmt = $this->conn->prepare($query);
-                $stmt->bind_param("ssi", $uploadImage['image'], $texte, $id);
+                $stmt->bind_param("sssii", $title, $uploadImage['image'], $description, $position, $id);
             } else {
                 // Si aucune nouvelle image n'est fournie ou si l'upload de l'image a échoué, mettez à jour le texte uniquement
-                $query = "UPDATE " . $this->sectionTable . " SET texte = ? WHERE id = ?";
+                $query = "UPDATE " . $this->sectionTable . " SET title = ?, description = ?, position = ? WHERE id = ?";
                 $stmt = $this->conn->prepare($query);
-                $stmt->bind_param("si", $texte, $id);
+                $stmt->bind_param("ssii", $title, $description, $position, $id);
             }
-    
+
             // Exécuter la requête
             if ($stmt->execute()) {
                 $success = true;
             }
-    
+
             // Fermer la requête
             $stmt->close();
         }
-    
+
         $data = [
             'success' => $success,
             'errMsg' => $validate['errMsg'],
             'uploadImage' => $uploadImage['imageErr'] ?? 'Unable to upload image due to other fields facing errors',
         ];
-    
+
         return $data;
     }
-    
+
     public function deleteImageFile($imageName) {
-        $uploadTo = __DIR__ . "/../public/images/section01/";  // Assurez-vous que c'est le bon chemin
+        $uploadTo = __DIR__ . "/../public/images/section03/";  
         $filePath = $uploadTo . $imageName;
-    
-        // Vérifiez si le fichier existe avant de le supprimer
+
         if (file_exists($filePath)) {
             if (unlink($filePath)) {
                 return true;
             } else {
-                // Gestion des erreurs si la suppression échoue
                 return false;
             }
         } else {
-            // Le fichier n'existe pas
             return false;
         }
     }
-    
-    
-    
-    
-    
 
     public function deleteById($id) {
         $data = $this->getById($id);
-    
+
         $query = "DELETE FROM " . $this->sectionTable . " WHERE id = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $id);
-    
+
         if ($stmt->execute()) {
             $stmt->close();
-    
-            // Supprimer l'image du dossier après avoir supprimé l'entrée de la base de données
+
             $this->deleteImageFile($data['image']);
-    
+
             return true;
         } else {
             $stmt->close();
             return false;
         }
     }
+
     public function deleteImageFileOnDelete($id) {
         $data = $this->getById($id);
-    
-        // Vérifiez si l'entrée existe avant de la supprimer
+
         if (!empty($data['image'])) {
-            // Chemin du dossier de stockage
-            $uploadTo = "public/images/section01/";
-    
-            // Chemin complet du fichier image
+            $uploadTo = "public/images/section03/";
+
             $filePath = $uploadTo . $data['image'];
-    
-            // Ajoutez des messages de débogage
-            echo "Trying to delete file: " . $filePath . "<br>";
-    
-            // Vérifiez si le fichier existe avant de le supprimer
+
             if (file_exists($filePath)) {
                 if (unlink($filePath)) {
                     echo "File deleted successfully.<br>";
@@ -277,7 +262,5 @@ public function validate($image, $texte) {
             }
         }
     }
-    
-    
 }
 ?>

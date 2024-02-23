@@ -1,20 +1,24 @@
 <?php
 require_once('..\database.php');
+require_once('../admin/scripts/Section03.php'); 
 require_once('../admin/scripts/Section02.php');
 require_once('../admin/scripts/SectionManager.php');
+
 $sectionManager = new SectionManager($conn);
 $sections = $sectionManager->get();
-$section = new section($conn);
 
-// Assuming $section->get() returns an array of objects
+$section = new section($conn);
 $sectiones = $section->get();
 
-// Convert objects to associative arrays
+$section03 = new Section03($conn); 
+$products = $section03->get();
+
 $sectionData = [];
 foreach ($sectiones as $section) {
     $sectionData[] = (array)$section;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -268,44 +272,44 @@ foreach ($sectiones as $section) {
 </section>
 
 
-    <section id="featured-products" class="ftco-section testimony-section">
-      <div class="container">
+<section id="featured-products" class="ftco-section testimony-section">
+    <div class="container">
         <div class="row justify-content-center mb-5 pb-3">
-          <div class="col-md-7 heading-section ftco-animate text-center">
-          	<span class="subheading">Badwa product</span>
-            <h2 class="mb-4">Nos produits</h2>
-            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in</p>
-          </div>
+            <div class="col-md-7 heading-section ftco-animate text-center">
+                <h2 class="mb-4 subheading">Produits Badwa</h2>
+            </div>
         </div>
         <div class="row ftco-animate">
             <div class="col-md-12">
-                <div class="custom-testimony-container">    
-                    <!-- Product 2 -->
-                    <div class="custom-testimony-wrap p-4 pb-5">
-                         <div class="custom-user-img mb-5" style="background-image: url(../Templates/images/person_2.jpg)">
-                         </div>
-                         <div class="text text-center">
-                             <h5 class="testimonial-title">Authentique Dattes</h5>
-                             <p class="mb-5 pl-4 line">dattes nour est la meilleure d'algérie Lorem ipsum, dolor sit amet consectetur adipisicing elit. Porro maiores sunt, exercitationem quae quibusdam, sapiente ipsam quos suscipit ducimus doloremque
-                               officiis repellendus. Tempora voluptatibus voluptatum nisi in, blanditiis suscipit velit! </p>
-                             <span class="position">azul</span>
-                         </div>
-                     </div>
-                <div class="navigation-btns text-center">
-                    <button class="prev-btn">&#8249; </button>
-                    <button class="next-btn"> &#8250;</button>
+                <div class="custom-testimony-container">
+                    <?php foreach ($products as $product) : ?>
+                        <!-- Product -->
+                        <div class="custom-testimony-wrap p-4 pb-5">
+                        <div class="custom-user-img mb-5" style="background-image: url(../admin/public/images/section03/<?php echo $product['image']; ?>)">
+                            </div>
+                            <div class="text text-center">
+                                <h5 class="testimonial-title"><?php echo $product['title']; ?></h5>
+                                <p class="mb-5 pl-4 line"><?php echo $product['description']; ?></p>
+                                <span class="position"><?php echo $product['position']; ?></span>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                    <div class="navigation-btns text-center">
+                        <button class="prev-btn">&#8249; </button>
+                        <button class="next-btn"> &#8250;</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
+
 	<section id="google-maps" class="ftco-section">
 		<div class="container">
 			<div class="row justify-content-center mb-5 pb-3">
 				<div class="col-md-7 heading-section ftco-animate text-center">
-					<span class="subheading">Location</span>
-					<h2 class="mb-4">Notre siège social</h2>
+					<h2 class="subheading bold">Notre siège social</h2>
 					<p>Badwa vous ouvre ses portes pour une expérience d'achat exquise des dérivés du fruit de paradis.</p>
 				</div>
 			</div>

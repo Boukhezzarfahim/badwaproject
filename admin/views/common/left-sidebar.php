@@ -25,6 +25,11 @@
             <i class='fa fa-list-alt'> Deuxième section</i> 
             </a>
         </li>
+        <li class="nav-item">
+            <a href="dashboard.php?page=section03" class="nav-link">
+            <i class='fa fa-list-alt'> Troisième section</i> 
+            </a>
+        </li>
     </ul>
 </li>
 

@@ -77,4 +77,4 @@ if (isset($_GET['id'])) {
         </tbody>
     </table>
 </div>
-<script src="public/js/ajax/delete-section.js"></script>
+<script src="public/js/ajax/delete-section-manager.js"></script>

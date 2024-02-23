@@ -10030,7 +10030,7 @@ textarea.form-control {
 
 .carousel-item.active {
     opacity: 1; /* Définissez l'opacité à 1 pour l'élément actif */
-    transition: opacity 0.5s ease-in-out; /* Transition plus lente pour l'élément actif */
+    transition: opacity 0.3s ease-in-out; /* Transition plus lente pour l'élément actif */
 }
 
 .carousel-content {
@@ -10048,10 +10048,10 @@ textarea.form-control {
     margin-bottom: 20px;
     font-family: "Amatic SC", cursive; /* Exemple de police Google */
     color: #fff;
-    text-shadow: 2px 2px 4px #28a745;;
+   
     letter-spacing: 1px;
     line-height: 1;
-    transition: color 0.2s ease;
+    transition: color ;
 }
 
 .carousel-content h1:hover {

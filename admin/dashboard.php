@@ -76,6 +76,14 @@
           case 'section-form02':
             require_once 'views/admin-profile/section/form.php';
             break;
+
+            case 'section03':
+              require_once 'views/admin-profile/section03/table.php';
+              break;
+  
+            case 'section-form03':
+              require_once 'views/admin-profile/section03/form.php';
+              break;
       
           case 'section-head-form':
             require_once 'views/admin-profile/sectionheadtable.php';
